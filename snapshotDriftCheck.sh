@@ -7,6 +7,13 @@ flyway info check -drift -dryrun -code  -check.deployedSnapshot="C:\snapshots\VC
 ## if there is drift - generate script to represent drift
 ## generate script to run against cleaned shadow
 
+## take pre-deployment snapshot of shadow for drift report
+flyway snapshot -url=jdbc:oracle:thin:@//localhost:1521/Acceptance -user="HR" -password="Redgate1" -snapshot.filename="C:\snapshots\VCurrent_snapshot"
+
+## Pre-Deploy Drift Check - Use snapshots for Drift and Change reports
+flyway info check -drift -dryrun -code  -check.deployedSnapshot="C:\snapshots\VCurrent_snapshot" -check.failOnDrift="false"  -schemas="HR" -url="jdbc:oracle:thin:@//localhost:1521/Production" -user="$HR" -password="Redgate1" -check.reportFilename=".\HR-DriftReport.html" -licenseKey=$(FLYWAY_LICENSE_KEY)  
+
+
 
 ## deploy to Shadow
 ## flyway migrate -url=$(Shadow_JDBC_URL) -user=$(shadow_username) -password=$(shadow_password)
