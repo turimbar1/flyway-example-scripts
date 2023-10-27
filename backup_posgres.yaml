@@ -1,0 +1,6 @@
+sourceType: Backup
+name: backup-postgres-local
+engine: postgresql
+version: 14
+backups:
+  - file: sql/postgres_backup.sql
