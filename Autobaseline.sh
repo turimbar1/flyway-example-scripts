@@ -32,6 +32,24 @@ DiffOptions="{ \
         ""schemas"": ["$Schema"], \
         ""resolverProperties"": [] }"
 
+$SchemaDiffs = $DiffOptions | \
+    flyway-dev diff \
+        -p "$WorkingFolderPath" \
+        -a ""$ArtifactPath"2" \
+        --from Target \
+        --to SchemaModel \
+        --output json \
+        --i-agree-to-the-eula
+
+echo $schemaDiffs.differences.id | \
+    flyway-dev apply \
+    -p "$WorkingFolderPath" \
+        -a ""$ArtifactPath"2" \
+        --from Target \
+        --to SchemaModel \
+        --output json \
+        --i-agree-to-the-eula
+
 echo $DiffOptions | \
     flyway-dev diff \
         -p "$WorkingFolderPath" \
