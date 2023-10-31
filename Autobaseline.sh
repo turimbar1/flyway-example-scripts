@@ -43,11 +43,9 @@ $SchemaDiffs = $DiffOptions | \
 
 echo $schemaDiffs.differences.id | \
     flyway-dev apply \
-    -p "$WorkingFolderPath" \
+        -p "$WorkingFolderPath" \
         -a ""$ArtifactPath"2" \
-        --from Target \
-        --to SchemaModel \
-        --output json \
+        --verbose \
         --i-agree-to-the-eula
 
 echo $DiffOptions | \
