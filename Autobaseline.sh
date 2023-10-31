@@ -32,6 +32,7 @@ DiffOptions="{ \
         ""schemas"": ["$Schema"], \
         ""resolverProperties"": [] }"
 
+# schema model diffs
 $SchemaDiffs = $DiffOptions | \
     flyway-dev diff \
         -p "$WorkingFolderPath" \
@@ -41,6 +42,7 @@ $SchemaDiffs = $DiffOptions | \
         --output json \
         --i-agree-to-the-eula
 
+#apply to schema model
 echo $schemaDiffs.differences.id | \
     flyway-dev apply \
         -p "$WorkingFolderPath" \
