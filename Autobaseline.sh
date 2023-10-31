@@ -8,7 +8,7 @@ WorkingFolderPath="~/databases/example-project"
 DatabaseType="Oracle" # alt values: SqlServer Oracle PostgreSql 
 Url="jdbc:oracle:thin:@//localhost:1521/Dev1"
 User="HR"
-Password="Redg@te1"
+Password="Password"
 
 # Set the schema value
 Schema="HR" # can be empty for SqlServer
