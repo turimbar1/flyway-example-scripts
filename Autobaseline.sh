@@ -12,11 +12,11 @@ flyway-dev() {
 WorkingFolderPath=~/.
 
 # Set the database type and database connection properties
-DatabaseType="SqlServer" # alt values: SqlServer Oracle PostgreSql 
-Url="jdbc:sqlserver://localhost:1433;databaseName=TalkrDev;trustServerCertificate=true;"
-User="sa"
-Password="TalkrPass123"
-Schemas='' # May be '' for SqlServer or '"Schema1", "Schema2"' for Oracle
+DatabaseType="Oracle" # alt values: SqlServer Oracle PostgreSql 
+Url="jdbc:oracle:thin:@//localhost:1521/Dev1"
+User="HR"
+Password="Password"
+Schemas='"HR"' # May be '' for SqlServer or '"Schema1", "Schema2"' for Oracle
 
 # Set the paths
 ArtifactPath="/tmp/artifact.zip"
