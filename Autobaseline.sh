@@ -1,73 +1,47 @@
 #!/bin/bash
 set -euo pipefail
 
+# Point to where flyway dev is
+# If you didn't create the entrypoint script you may need to invoke flyway dev through dotnet
+# e.g. /opt/flyway-desktop/dotnet/dotnet /opt/flyway-desktop/flyway-dev/flyway-dev.dll
+flyway-dev() {
+    /opt/flyway-desktop/flyway-dev.sh --i-agree-to-the-eula "$@"
+}
+
 # Set the working folder path
-WorkingFolderPath="~/databases/example-project"
+WorkingFolderPath=~/.
 
 # Set the database type and database connection properties
-DatabaseType="Oracle" # alt values: SqlServer Oracle PostgreSql 
-Url="jdbc:oracle:thin:@//localhost:1521/Dev1"
-User="HR"
-Password="Password"
+DatabaseType="SqlServer" # alt values: SqlServer Oracle PostgreSql 
+Url="jdbc:sqlserver://localhost:1433;databaseName=TalkrDev;trustServerCertificate=true;"
+User="sa"
+Password="TalkrPass123"
+Schemas='' # May be '' for SqlServer or '"Schema1", "Schema2"' for Oracle
 
-# Set the schema value
-Schema="HR" # can be empty for SqlServer
-
-# Set the artifact and migration paths
-ArtifactPath=""$WorkingFolderPath"/artifact.zip"
-MigrationPath=""$WorkingFolderPath"/migrations"
+# Set the paths
+ArtifactPath="/tmp/artifact.zip"
+ProjectPath="$WorkingFolderPath/flyway.toml"
+MigrationPath="$WorkingFolderPath/migrations"
 
 # Create a project
-flyway-dev init \
-    -n Autobaseline \
-    -p "$WorkingFolderPath" \
-    --database-type "$DatabaseType" \
-    --i-agree-to-the-eula
-
-DiffOptions="{ \
-        ""url"": ""$Url"", \
-        ""user"": ""$User"", \
-        ""password"": ""$Password"", \
-        ""token"": null, \
-        ""schemas"": ["$Schema"], \
-        ""resolverProperties"": [] }"
+flyway-dev init -n Autobaseline -p "$WorkingFolderPath" --database-type "$DatabaseType"
 
 # schema model diffs
-$SchemaDiffs = $DiffOptions | \
-    flyway-dev diff \
-        -p "$WorkingFolderPath" \
-        -a ""$ArtifactPath"2" \
-        --from Target \
-        --to SchemaModel \
-        --output json \
-        --i-agree-to-the-eula
+DiffOptions=$(cat <<-END
+{ "url": "$Url", "user": "$User", "password": "$Password", "schemas": [$Schemas], "resolverProperties": [] } 
+END
+)
+
+echo "$DiffOptions" \
+  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to SchemaModel
 
 #apply to schema model
-echo $SchemaDiffs.differences.id | \
-    flyway-dev apply \
-        -p "$WorkingFolderPath" \
-        -a ""$ArtifactPath"2" \
-        --verbose \
-        --i-agree-to-the-eula
+flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
+  | flyway-dev apply -p "$ProjectPath" -a "$ArtifactPath"
 
-echo $DiffOptions | \
-    flyway-dev diff \
-        -p "$WorkingFolderPath" \
-        -a "$ArtifactPath" \
-        --from Target \
-        --to Empty \
-        --output json \
-        --i-agree-to-the-eula
+echo "$DiffOptions" \
+  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to Empty
 
 # Generate the baseline from all differences
-flyway-dev take \
-    -p "$WorkingFolderPath" \
-    -a "$ArtifactPath" \
-    --i-agree-to-the-eula | \
-        flyway-dev generate \
-            -p "$WorkingFolderPath" \
-            -a "$ArtifactPath" \
-            -o "$MigrationPath" \
-            --name 'B1__script.sql' \
-            --versioned-only \
-            --i-agree-to-the-eula
+flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
+  | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --name 'B1__script.sql' --versioned-only
