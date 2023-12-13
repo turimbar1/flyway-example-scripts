@@ -26,6 +26,8 @@ MigrationPath="$WorkingFolderPath/migrations"
 # Create a project
 flyway-dev init -n Autobaseline -p "$WorkingFolderPath" --database-type "$DatabaseType"
 
+echo -e '\n\n[environments.development]\nurl = "some-url"\nschemas = [$Schemas] >> $ProjectPath'
+
 # schema model diffs
 DiffOptions=$(cat <<-END
 { "url": "$Url", "user": "$User", "password": "$Password", "schemas": [$Schemas], "resolverProperties": [] } 
