@@ -46,4 +46,4 @@ echo "$DiffOptions" \
 
 # Generate the baseline from all differences
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
-  | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --name 'B1__script.sql' --versioned-only
+  | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --name 'B1__baseline.sql' --versioned-only
