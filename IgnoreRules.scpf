@@ -1,0 +1,55 @@
+{
+  "filters": {
+    "function": [
+      "."
+    ],
+    "job": [
+      "."
+    ],
+    "materializedView": [
+      "."
+    ],
+    "materializedViewLog": [
+      "."
+    ],
+    "package": [
+      "."
+    ],
+    "packageBody": [
+      "."
+    ],
+    "procedure": [
+      "."
+    ],
+    "publicSynonym": [
+      "."
+    ],
+    "queue": [
+      "."
+    ],
+    "queueTable": [
+      "."
+    ],
+    "sequence": [
+      "."
+    ],
+    "synonym": [
+      "."
+    ],
+    "table": [
+      "\!^TEST"
+    ],
+    "trigger": [
+      "."
+    ],
+    "type": [
+      "."
+    ],
+    "userObjectPrivileges": [
+      "."
+    ],
+    "view": [
+      "."
+    ]
+  }
+}
