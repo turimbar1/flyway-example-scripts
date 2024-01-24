@@ -46,8 +46,8 @@ flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
   | flyway-dev apply -p "$ProjectPath" -a "$ArtifactPath"
 
 echo "$DiffOptions" \
-  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to Shadow
+  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to Migrations
 
 # Generate the baseline from all differences
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
-  | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --name 'B1__baseline.sql' --versioned-only
+  | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" 
