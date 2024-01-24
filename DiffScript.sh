@@ -37,6 +37,11 @@ DiffOptions=$(cat <<-END
 END
 )
 
+ShadowDiffOptions=$(cat <<-END
+{ "url": "$ShadowUrl", "user": "$ShadowUser", "password": "$ShadowPassword", "schemas": [$Schemas], "resolverProperties": [] } 
+END
+)
+
 
 echo "$DiffOptions" \
   | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to SchemaModel
@@ -45,8 +50,9 @@ echo "$DiffOptions" \
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
   | flyway-dev apply -p "$ProjectPath" -a "$ArtifactPath"
 
-echo "$DiffOptions" \
-  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to Migrations
+#diff between schema model and shadow/migrations scripts
+echo "$ShadowDiffOptions" \
+  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from SchemaModel --to Target
 
 # Generate the baseline from all differences
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
