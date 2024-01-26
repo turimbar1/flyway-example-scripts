@@ -54,6 +54,6 @@ flyway clean migrate info -url="$ShadowUrl" -user="$ShadowUser" -password="$Shad
 echo "$ShadowDiffOptions" \
   | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from SchemaModel --to Target --i-agree-to-the-eula
 
-# Generate the baseline from all differences
+# Generate the diff script between baseline and this environment
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula \
   | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --i-agree-to-the-eula
