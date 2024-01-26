@@ -11,8 +11,7 @@ flyway-dev() {
 # Set the working folder path
 WorkingFolderPath=~/.
 
-# Set the database type and database connection properties
-DatabaseType="Oracle" # alt values: SqlServer Oracle PostgreSql 
+#Set the environment (eg Dev, QA, Test) database connection properties
 Url="jdbc:oracle:thin:@//localhost:1521/Dev1"
 User="HR"
 Password="Password"
@@ -28,8 +27,6 @@ ShadowPassword="Password"
 ArtifactPath="/tmp/artifact.zip"
 ProjectPath="$WorkingFolderPath/flyway.toml"
 MigrationPath="$WorkingFolderPath/migrations"
-
-echo -e "\n\n[environments.shadow]\nurl = \"some-url\"\nschemas = [$Schemas]" >> "$ProjectPath"
 
 # schema model diffs
 DiffOptions=$(cat <<-END
@@ -49,6 +46,9 @@ echo "$DiffOptions" \
 #apply to schema model
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
   | flyway-dev apply -p "$ProjectPath" -a "$ArtifactPath"
+
+#deploy migrations to shadow
+flyway clean migrate info -url="$ShadowUrl" -user="$ShadowUser" -password="$ShadowPassword" -workingDirectory="$WorkingFolderPath" -cleanDisabled="false"
 
 #diff between schema model and shadow/migrations scripts
 echo "$ShadowDiffOptions" \
