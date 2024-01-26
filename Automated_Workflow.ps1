@@ -1,6 +1,6 @@
 # Define base path
-# $basePath = Get-Location
-$basePath = "C:\WorkingFolders\FWD\NewWorldDB"
+# $basePath = "C:\WorkingFolders\FWD\<projectRoot>"
+$basePath = Get-Location
 
 # Define variables for paths
 $flywayTomlPath = Join-Path $basePath "flyway.toml"
