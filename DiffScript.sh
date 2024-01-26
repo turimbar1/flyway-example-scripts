@@ -48,7 +48,7 @@ flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" \
   | flyway-dev apply -p "$ProjectPath" -a "$ArtifactPath"
 
 #deploy migrations to shadow
-flyway clean migrate info -url="$ShadowUrl" -user="$ShadowUser" -password="$ShadowPassword" -workingDirectory="$WorkingFolderPath" -cleanDisabled="false"
+flyway clean migrate info -url="$ShadowUrl" -user="$ShadowUser" -password="$ShadowPassword" -workingDirectory="$WorkingFolderPath" -cleanDisabled="false" -schemas="$Schemas" -baselinOnMigrate="true"
 
 #diff between schema model and shadow/migrations scripts
 echo "$ShadowDiffOptions" \
