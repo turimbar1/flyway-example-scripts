@@ -57,3 +57,6 @@ echo "$ShadowDiffOptions" \
 # Generate the diff script between baseline and this environment
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula \
   | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --i-agree-to-the-eula
+
+#mark scripts as deployed to target environment
+# flyway migrate info -skipExecutingMigrations="true" -url="$Url" -user="$User" -password="$Password" -workingDirectory="$WorkingFolderPath" -cleanDisabled="false" -schemas="$Schemas" -baselinOnMigrate="true"
