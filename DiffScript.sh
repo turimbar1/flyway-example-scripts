@@ -39,6 +39,7 @@ ShadowDiffOptions=$(cat <<-END
 END
 )
 
+echo -e "\n\n[environments.shadow]\nurl = \"$ShadowUrl\"\nuser = \"$ShadowUser\"\npassword = \"$ShadowPassword\"\nschemas = [$Schemas]"\nprovisioner = \"clean\" >> "$ProjectPath"
 
 echo "$DiffOptions" \
   | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to SchemaModel --i-agree-to-the-eula
@@ -51,8 +52,8 @@ flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula \
 flyway clean migrate info -url="$ShadowUrl" -user="$ShadowUser" -password="$ShadowPassword" -workingDirectory="$WorkingFolderPath" -cleanDisabled="false" -schemas="$Schemas" -baselinOnMigrate="true"
 
 #diff between schema model and shadow/migrations scripts
-echo "$ShadowDiffOptions" \
-  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from SchemaModel --to Target --i-agree-to-the-eula
+#echo "$ShadowDiffOptions" \
+flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from SchemaModel --to Target --i-agree-to-the-eula
 
 # Generate the diff script between baseline and this environment
 flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula \
