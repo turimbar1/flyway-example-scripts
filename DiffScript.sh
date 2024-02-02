@@ -35,7 +35,7 @@ DiffOptions=$(cat <<-END
 END
 )
 
-
+#adding shadow env to flyway.user.toml config for migration generation
 echo -e "\n\n[environments.shadow]\nurl = \"$ShadowUrl\"\nuser = \"$ShadowUser\"\npassword = \"$ShadowPassword\"\nschemas = [$Schemas]\nprovisioner = \"clean\"" >> "$ProjectPath"
 
 echo "$DiffOptions" \
