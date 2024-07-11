@@ -12,6 +12,7 @@ flyway-dev() {
 WorkingFolderPath=~/.
 
 # Set the database type and database connection properties
+DatabaseName="Autobaseline"
 DatabaseType="Oracle" # alt values: SqlServer Oracle PostgreSql 
 Url="jdbc:oracle:thin:@//localhost:1521/Dev1"
 User="HR"
@@ -24,7 +25,7 @@ ProjectPath="$WorkingFolderPath/flyway.toml"
 MigrationPath="$WorkingFolderPath/migrations"
 
 # Create a project
-flyway-dev init -n Autobaseline -p "$WorkingFolderPath" --database-type "$DatabaseType"
+flyway-dev init -n $DatabaseName -p "$WorkingFolderPath" --database-type "$DatabaseType"
 
 echo -e "\n\n[environments.development]\nurl = \"some-url\"\nschemas = [$Schemas]" >> "$ProjectPath"
 
