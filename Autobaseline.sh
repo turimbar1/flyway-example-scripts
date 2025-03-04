@@ -74,7 +74,7 @@ echo $SCHEMAS
 
 DatabaseType="$DBTYPE" # alt values: SqlServer Oracle PostgreSql 
 
-#Url="jdbc:oracle:thin:@//x0stl11-scan.mastercard.int:1527/PDBCDPCS01S" 
+#Url="jdbc:oracle:thin:@//hOst200-scan.heronet.int:1527/PDBCDPCS10A" 
 
 Url="$DBBASELINEURL" 
 
