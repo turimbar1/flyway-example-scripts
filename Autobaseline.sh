@@ -14,7 +14,7 @@ set -euo pipefail
 
 # Set the working folder path
 
-export DOTNET_ROOT=/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/dotnet
+export DOTNET_ROOT=/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/dotnet #TODO Change this to Current flyway version
 
 export PATH=${PATH}:/etc:/usr/lib:/usr/lib64:/usr/local/bin:/sys_bckup/reel/bin:/usr/etc:/usr/bin/X11:/etc/conf/bin:/oracle/local/bin:/opt/ddl_automation/OEL8/flyway-10.15.2:/opt/ddl_automation/instantclient_19_15:/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/flyway-dev:/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/dotnet
 
@@ -84,23 +84,20 @@ Schemas="$SCHEMAS" # May be '' for SqlServer or '"Schema1", "Schema2"' for Oracl
 
 echo $SCHEMAS
 
- 
 
-# Set the paths
 
-ArtifactPath="$WorkingFolderPath/artifact.zip"
+# Set the project file path
 
 ProjectPath="$WorkingFolderPath/flyway.toml"
 
-MigrationPath="$WorkingFolderPath/migrations"
 
- 
 
 # Create a project
 
-flyway-dev init -n Autobaseline -p "$WorkingFolderPath" --database-type "$DatabaseType" --i-agree-to-the-eula
+flyway-dev init -init.projectName="Autobaseline" -workingDirectory="$WorkingFolderPath" -init.databaseType="$DatabaseType" --i-agree-to-the-eula
 
-echo -e "\n\n[environments.development]\nurl = \"some-url\"\nschemas = [$Schemas]" >> "$ProjectPath"
+
+# Set Datatase comparison options
 
 sed -i 's/includeStoragePartitioning = false/includeStoragePartitioning = true/g' "$ProjectPath"
 
@@ -109,47 +106,13 @@ sed -i 's/ignoreSupplementalLogGroups = false/ignoreSupplementalLogGroups = true
 sed -i 's/ignorePermissions = true/ignorePermissions = false/g' "$ProjectPath"
 
  
+# Create a schema model from the target environment
 
- 
+flyway diff model -workingDirectory="$WorkingFolderPath""-diff.source=dev" "-diff.target=schemaModel" "-environments.dev.url=$Url" "-environments.dev.user=$User" "-environments.dev.password=$Password" "-environments.dev.schemas=$Schemas"
 
-# schema model diffs
 
-DiffOptions=$(cat <<-END
+# Generate the diff script between baseline and schema model
 
-{ "url": "$Url", "user": "$User", "password": "$Password", "schemas": [$Schemas], "resolverProperties": [] }
-
-END
-
-)
-
- 
-
-echo "$DiffOptions" \
-
-  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to SchemaModel --i-agree-to-the-eula
-
- 
-
-#apply to schema model
-
-flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula \
-
-  | flyway-dev apply -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula
-
- 
-
-echo "$DiffOptions" \
-
-  | flyway-dev diff -p "$ProjectPath" -a "$ArtifactPath" --from Target --to Empty --i-agree-to-the-eula
-
- 
-
-# Generate the baseline from all differences
-
-flyway-dev take -p "$ProjectPath" -a "$ArtifactPath" --i-agree-to-the-eula \
-
-  | flyway-dev generate -p "$ProjectPath" -a "$ArtifactPath" -o "$MigrationPath" --name 'B1__script.sql' --versioned-only --i-agree-to-the-eula
-
- 
+flyway diff generate -workingDirectory="$WorkingFolderPath" "-diff.source=schemaModel" "-diff.target=empty" "-generate.types=baseline" "-generate.version=1" 
 
 echo -e "\n[flyway.oracle]\nsqlplus = true" >> "$ProjectPath"
