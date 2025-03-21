@@ -95,7 +95,7 @@ ProjectPath="$WorkingFolderPath/flyway.toml"
 
 # Create a project
 
-flyway init -init.projectName="Autobaseline" -workingDirectory="$WorkingFolderPath" -init.databaseType="$DatabaseType" --i-agree-to-the-eula
+flyway init -init.projectName="$SCHEMAS" -workingDirectory="$WorkingFolderPath" -init.databaseType="$DatabaseType" --i-agree-to-the-eula
 
 
 # Set Datatase comparison options

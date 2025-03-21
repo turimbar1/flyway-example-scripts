@@ -6,7 +6,7 @@ $Password = ""
 $projectName = "Autobaseline"
 
 # Set the schemas value
-$chemas = @("") # can be empty for SqlServer
+$Schemas = @("") # can be empty for SqlServer
 
 mkdir $projectName
 cd ./$projectName
