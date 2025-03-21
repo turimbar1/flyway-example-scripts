@@ -16,7 +16,8 @@ set -euo pipefail
 
 export DOTNET_ROOT=/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/dotnet #TODO Change this to Current flyway version
 
-export PATH=${PATH}:/etc:/usr/lib:/usr/lib64:/usr/local/bin:/sys_bckup/reel/bin:/usr/etc:/usr/bin/X11:/etc/conf/bin:/oracle/local/bin:/opt/ddl_automation/OEL8/flyway-10.15.2:/opt/ddl_automation/instantclient_19_15:/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/flyway-dev:/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/dotnet
+#TODO Change below to Current flyway version & remove flyway-dev reference
+export PATH=${PATH}:/etc:/usr/lib:/usr/lib64:/usr/local/bin:/sys_bckup/reel/bin:/usr/etc:/usr/bin/X11:/etc/conf/bin:/oracle/local/bin:/opt/ddl_automation/OEL8/flyway-10.15.2:/opt/ddl_automation/instantclient_19_15:/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/flyway-dev:/opt/ddl_automation/OEL8/flyway-desktop-7.2.1/dotnet 
 
  
 
