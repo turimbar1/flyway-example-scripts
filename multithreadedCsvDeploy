@@ -1,6 +1,6 @@
 # Define the script block to run in each runspace
 $scriptBlock = {
-    param ($currentJDBC, $baselineVersion, $flywayLicenseKey, $workingDirectory)
+    param ($currentJDBC, $workingDirectory)
     
     $deployment = "flyway migrate -outOfOrder='true' -baselineOnMigrate='true' -errorOverrides='S0001:0:I' -configFiles=$workingDirectory\flyway.toml -locations=filesystem:$workingDirectory\migrations -url='$currentJDBC'"
     Write-Host "flywayCommand: $deployment"
@@ -20,7 +20,7 @@ $deploymentTargets = Import-Csv -Path $deploymentTargetsList
 
 # Create and start runspaces
 foreach ($target in $deploymentTargets) {
-    $runspace = [powershell]::Create().AddScript($scriptBlock).AddArgument($target.JDBCString).AddArgument($baselineVersion).AddArgument($flywayLicenseKey).AddArgument($workingDirectory)
+    $runspace = [powershell]::Create().AddScript($scriptBlock).AddArgument($target.JDBCString).AddArgument($workingDirectory)
     $runspace.RunspacePool = $runspacePool
     $runspaces += [PSCustomObject]@{ Pipe = $runspace; Status = $runspace.BeginInvoke() }
 }
